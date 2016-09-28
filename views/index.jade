@@ -1,5 +1,8 @@
 extends layout
+include mixins
 
 block content
-  h1= title
-  p Welcome to #{title}
+  h1= components.titre
+  p Welcome to
+  
+  +text(components.titre)

@@ -1,0 +1,21 @@
+mixin text(component)
+  span= component
+
+mixin wysiwyg(component)
+  p= component
+
+mixin image(component)
+  img(src="uploads/images/#{component}")
+
+mixin builder(rows)
+  - each row in rows
+    div.row
+      - each component in row.components
+        div(class="col-md-#{component.size}")
+          case component.type
+            when 'text'
+              +text(component.value)
+            when 'wysiwyg'
+              +wysiwyg(component.value)
+            when 'image'
+              +image(component.value)
