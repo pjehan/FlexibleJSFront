@@ -4,16 +4,21 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var MongoClient = require('mongodb').MongoClient;
+
+var config = require('./config');
 
 var routes = require('./routes/index');
 
 var app = express();
 
+app.locals.config = config;
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.set('port', process.env.PORT || 3001)
+app.set('port', process.env.PORT || config.app.port)
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -24,6 +29,15 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
+
+MongoClient.connect(config.db.url, function(err, db) {
+  if (err) throw err;
+  app.locals.db = db;
+  app.locals.site = config.site;
+  app.listen(app.get('port'), function (err) {
+    if (err) throw err;
+  });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -56,5 +70,4 @@ app.use(function(err, req, res, next) {
   });
 });
 
-app.listen(app.get('port'));
 module.exports = app;

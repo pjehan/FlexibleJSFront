@@ -1,0 +1,15 @@
+var config = {
+  site: 'my-website.com',
+  app: {
+    port: 3001
+  },
+  db: {
+    host: 'localhost',
+    port: 27017,
+    name: 'mywebsite'
+  }
+};
+
+config.db.url = 'mongodb://' + config.db.host + ':' + config.db.port + '/' + config.db.name;
+
+module.exports = config;
