@@ -1,12 +1,25 @@
 var config = {
-  site: 'my-website.com',
+  site: 'www.my-website.com',
+  homepage: 'index',
   app: {
-    port: 3001
+    port: 3001,
+    env: 'development'
   },
   db: {
     host: 'localhost',
     port: 27017,
     name: 'mywebsite'
+  },
+  mailer: {
+    from: 'from@gmail.com',
+    to: 'to@gmail.com',
+    host: 'hostname',
+    secure: false,
+    port: 587,
+    auth: {
+      user: 'user',
+      pass: 'pass'
+    }
   }
 };
 

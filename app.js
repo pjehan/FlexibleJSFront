@@ -1,4 +1,6 @@
 var express = require('express');
+var mailer = require('express-mailer');
+var htmlToText = require('nodemailer-html-to-text').htmlToText;
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -8,7 +10,11 @@ var MongoClient = require('mongodb').MongoClient;
 
 var config = require('./config');
 
-var routes = require('./routes/index');
+var sitemapRoutes = require('./routes/sitemap');
+var redirectRoutes = require('./routes/redirect');
+var imageRoutes = require('./routes/images');
+var emailRoutes = require('./routes/emails');
+var pageRoutes = require('./routes/index');
 
 var app = express();
 
@@ -18,7 +24,8 @@ app.locals.config = config;
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.set('port', process.env.PORT || config.app.port)
+app.set('port', config.app.port || process.env.PORT);
+app.set('env', config.app.env || process.env.NODE_ENV);
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -28,12 +35,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
+mailer.extend(app, config.mailer);
+app.use('compile', htmlToText());
+
+app.use('/', redirectRoutes);
+app.use('/', sitemapRoutes);
+app.use('/_images', imageRoutes);
+app.use('/_email', emailRoutes);
+app.use('/', pageRoutes);
 
 MongoClient.connect(config.db.url, function(err, db) {
   if (err) throw err;
   app.locals.db = db;
-  app.locals.site = config.site;
   app.listen(app.get('port'), function (err) {
     if (err) throw err;
   });
