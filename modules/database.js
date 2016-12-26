@@ -66,8 +66,9 @@ class Database {
   * @param  {Function} callback Callback function
   * @return {Object}            Page object
   */
-  getPageBySlug(slug, callback) {
-    this.db.collection('pages').findOne({slug: slug, site_id: this.site}, (err, page) => {
+  getPageBySlug(slug, callback, site) {
+    site = site || this.site;
+    this.db.collection('pages').findOne({slug: slug, site_id: site}, (err, page) => {
       if (!page) {
         callback(null);
       } else {
@@ -82,8 +83,9 @@ class Database {
   * @param  {Function} callback Callback function
   * @return {Object}            Page object
   */
-  getPageByTemplate(template, callback) {
-    this.db.collection('pages').findOne({template: template, site_id: this.site}, (err, page) => {
+  getPageByTemplate(template, callback, site) {
+    site = site || this.site;
+    this.db.collection('pages').findOne({template: template, site_id: site}, (err, page) => {
       if (!page) {
         callback(null);
       } else {
