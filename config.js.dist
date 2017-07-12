@@ -20,6 +20,10 @@ var config = {
       user: 'user',
       pass: 'pass'
     }
+  },
+  recaptcha: {
+    sitekey: 'RECAPTCHA-SITEKEY',
+    secretkey: 'RECAPTCHA-SECRETKEY'
   }
 };
 

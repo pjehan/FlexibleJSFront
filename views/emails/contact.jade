@@ -1,0 +1,16 @@
+extends layout
+
+block content
+
+  table(role='presentation', cellspacing='0', cellpadding='0', border='0')
+    tr
+      td(style='padding-bottom: 20px; font-family: sans-serif; font-size: 20px; mso-height-rule: exactly; line-height: 20px;')
+        | Vous avez reçu un message de #{form.firstname} #{form.lastname} depuis votre formulaire de contact
+        
+  table(role='presentation', cellspacing='5', cellpadding='0', border='0')
+    tr
+      td Email :
+      td= form.email
+    tr
+      td Message :
+      td= form.message
