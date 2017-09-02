@@ -38,3 +38,9 @@ jspm_packages
 
 # FlexibleJS config file
 config.js
+
+# Upload dir
+public/uploads
+
+# Resized dir
+public/resized
