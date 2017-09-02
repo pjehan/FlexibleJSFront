@@ -22,7 +22,7 @@ app.locals.config = config;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 app.set('port', config.app.port || process.env.PORT);
 app.set('env', config.app.env || process.env.NODE_ENV);
