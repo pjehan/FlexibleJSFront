@@ -19,23 +19,23 @@ router.get('/*', function(req, res, next) {
     }
 
     const db = req.app.locals.db;
-    var site = (req.app.get('env') === 'development') ? req.app.locals.config.site : req.get('host');
+    var site = req.app.locals.config.site;
     var slug = req.params.slug || req.params.cat || req.app.locals.config.homepage;
-    var lang = req.params.lang || 'fr';
+    var lang = req.params.lang || req.app.locals.config.defaultLocale;
 
     var database = new Database(db, site, lang);
-    
+
     moment.locale(lang);
     var locals = {lang: lang, currentDomain: req.protocol + '://' + req.get('host'), currentUrl: req.protocol + '://' + req.get('host') + req.originalUrl, moment: moment };
     var template = null;
 
     database.getPageBySlug(slug, function(page) {
-      
+
       if (!page || typeof page[lang] === 'undefined') {
         if (req.app.get('env') === 'development') {
-          return res.status(404).send('Page with slug <strong>' + slug + '</strong> not found in <strong>' + site + '</strong> website!');
+          return res.status(404).send('Page with slug <strong>' + slug + '</strong> and <strong>' + lang + '</strong> locale not found in <strong>' + site + '</strong> website!');
         } else {
-          lang = 'fr';
+          lang = req.app.locals.config.defaultLocale;
           template = '404';
           res.status(404);
         }
@@ -44,13 +44,13 @@ router.get('/*', function(req, res, next) {
         locals.components = page.getComponents();
         template = page.template;
       }
-      
+
       var functions = custom.loadData(locals, page, lang, database, db, template);
 
       async.parallel(functions, function(err, results) {
         return res.render(template, locals);
       });
-      
+
     });
 
   } else {
