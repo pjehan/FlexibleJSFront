@@ -1,21 +1,32 @@
-mixin text(component)
-  span= component
+mixin text(value)
+  #{value}
 
-mixin wysiwyg(component)
-  p= component
+mixin textarea(value)
+  if value
+    | !{value.replace(/\n/g, '<br/>')}
 
-mixin image(component)
-  img(src="uploads/images/#{component}")
+mixin wysiwyg(value)
+  | !{value}
+
+mixin image(component, processImage)
+  if component
+    if Array.isArray(component)
+      - component = component[0];
+    if processImage
+      img(src="/_images/#{component.src}?#{processImage}" alt=component.alt)&attributes(attributes)
+    else
+      img(src="/uploads/#{component.src}" alt=component.alt)&attributes(attributes)
 
 mixin builder(rows)
-  - each row in rows
-    div.row
-      - each component in row.components
-        div(class="col-md-#{component.size}")
-          case component.type
-            when 'text'
-              +text(component.value)
-            when 'wysiwyg'
-              +wysiwyg(component.value)
-            when 'image'
-              +image(component.value)
+  if rows
+    - each row in rows
+      div.row
+        - each component in row.components
+          div(class="col-md-#{component.size}")
+            case component.type
+              when 'text'
+                +text(component)
+              when 'wysiwyg'
+                +wysiwyg(component)
+              when 'image'
+                +image(component)
