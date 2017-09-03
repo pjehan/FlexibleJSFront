@@ -1,7 +1,15 @@
 doctype html
 html
   head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    if page
+      title= page[lang].seo_title
+      meta(name='description', content='#{page[lang].seo_metadescription}')
+    
+    block meta
+      meta(charset='utf-8')
+      meta(name='viewport', content='width=device-width, initial-scale=1')      
+    
+    block stylesheets
+      link(rel='stylesheet', type='text/css', href='/stylesheets/style.css')
   body
     block content
